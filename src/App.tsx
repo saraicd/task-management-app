@@ -1,11 +1,12 @@
-import './App.css'
-import { motion } from "framer-motion"
-import { Heading } from './components/common/Heading';
+import { motion } from "framer-motion";
+import { Heading } from "./components/common/Heading";
+import Sidebar from "./components/layout/Sidebar";
+import "./App.css";
 
 function App() {
-
   return (
     <>
+      <Sidebar />
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -17,7 +18,7 @@ function App() {
       <Heading level={2}>Experimental Project</Heading>
       <Heading level={3}>Under Construction</Heading>
     </>
-  )
+  );
 }
 
 export default App;
