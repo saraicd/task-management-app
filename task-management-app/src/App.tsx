@@ -1,20 +1,23 @@
 import './App.css'
+import { motion } from "framer-motion"
+import { Heading } from './components/common/Heading';
 
 function App() {
 
   return (
     <>
-      <div>
-        
-      </div>
-      <h1 className="transition-all duration-300 hover:scale-105 hover:text-blue-600">Task Manager App</h1>
-      <div className="card">
-      </div>
-      <p className="read-the-docs">
-        Experimental project
-      </p>
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="text-4xl font-bold text-center mt-10"
+      >
+        <Heading>Task Manager App</Heading>
+      </motion.div>
+      <Heading level={2}>Experimental Project</Heading>
+      <Heading level={3}>Under Construction</Heading>
     </>
   )
 }
 
-export default App
+export default App;
