@@ -12,9 +12,10 @@ A modern, responsive task management application built with **React**, **Vite**,
 ## Tech Stack
 
 - [React + Vite](https://vitejs.dev/)
-- [TanStack Router & Query](https://tanstack.com/)
+- [TanStack Query](https://tanstack.com/)
 - [ShadCN UI](https://ui.shadcn.com/)
 - [Tailwind CSS](https://tailwindcss.com/)
+- [Motion](https://motion.dev/)
 - [Lucide Icons](https://lucide.dev/)
 - [Inter Font](https://fonts.google.com/specimen/Inter)
 
