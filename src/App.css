@@ -9,7 +9,7 @@
   --color-brand: #543afd;
   --color-tertiary: #ebeef1;
   --color-error: #dc2626;
-  --color-black: #ebeef1;
+  --color-black: white;
 }
 
 .dark {
@@ -19,7 +19,6 @@
 }
 
 #root {
-  max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;

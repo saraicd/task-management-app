@@ -1,18 +1,17 @@
-import { Home, AlarmClockCheck, UsersRound, Clock8 } from "lucide-react";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { DarkModeToggle } from "./ThemeToggle";
+import { Button } from "../ui/button";
+import { linkList } from "../../data/Navigation";
 
-const linkList = [
-  { icon: Home, label: "Home", component: <></> },
-  { icon: AlarmClockCheck, label: "Tasks", component: <></> },
-  { icon: UsersRound, label: "People", component: <></> },
-  { icon: Clock8, label: "Time tracking", component: <></> },
-];
-
-const Sidebar = () => {
+const Sidebar = ({ onSelect }: { onSelect: (component: string) => void }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [selected, setSelected] = useState("Home");
+
+  const handleClick = (label: string) => {
+    onSelect(label);
+    setSelected(label);
+  };
 
   return (
     <motion.div
@@ -25,14 +24,17 @@ const Sidebar = () => {
       onHoverEnd={() => setIsExpanded(false)}
     >
       <ul className="space-y-6 w-full pt-6 px-4">
-        {linkList.map(({ icon: Icon, label }) => (
+        {linkList.map(({ icon: Icon, label, disabeld }) => (
           <li
             key={label}
             className="relative flex items-center group hover:scale-103"
           >
-            <button
-              onClick={() => setSelected(label)}
-              className={`flex items-center w-full text-left px-2 py-1 rounded transition-colors whitespace-nowrap cursor-pointer ${
+            <Button
+              variant="ghost"
+              key={label}
+              disabled={disabeld}
+              onClick={() => handleClick(label)}
+              className={`flex items-center justify-start w-full text-left px-2 py-1 rounded transition-colors whitespace-nowrap cursor-pointer ${
                 selected === label ? "bg-clicked text-brand" : "text-primary"
               }`}
             >
@@ -45,7 +47,7 @@ const Sidebar = () => {
               >
                 {isExpanded ? label : label.charAt(0)}
               </motion.span>
-            </button>
+            </Button>
           </li>
         ))}
       </ul>
