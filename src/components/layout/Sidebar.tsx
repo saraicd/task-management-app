@@ -23,7 +23,7 @@ const Sidebar = ({ onSelect }: { onSelect: (component: string) => void }) => {
       onHoverStart={() => setIsExpanded(true)}
       onHoverEnd={() => setIsExpanded(false)}
     >
-      <ul className="space-y-6 w-full pt-6 px-4">
+      <ul className="space-y-2 w-full pt-6 px-4">
         {linkList.map(({ icon: Icon, label, disabeld }) => (
           <li
             key={label}

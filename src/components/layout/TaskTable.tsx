@@ -163,7 +163,7 @@ export function TaskTable() {
                   return (
                     <TableHead
                       key={header.id}
-                      className=" border-secondary bg-tertiary text-primary  font-bold"
+                      className=" border-secondary bg-tertiary dark:bg-black text-primary  font-bold"
                     >
                       {header.isPlaceholder
                         ? null

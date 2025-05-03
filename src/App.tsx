@@ -11,22 +11,9 @@ function App() {
     linkList.find((link) => link.label === selectedLabel) || linkList[0];
 
   return (
-    <div
-      style={{
-        display: "flex",
-        width: "100%",
-        height: "100vh",
-      }}
-    >
+    <div className="flex w-full h-screen">
       <Sidebar onSelect={setSelectedLabel} />
-      <div
-        style={{
-          flexGrow: 1,
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
+      <div className="flex-grow flex items-center justify-center">
         <LandingPage currentPage={currentLink} />
       </div>
     </div>

@@ -1,6 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { LinkItem } from "../../data/Navigation";
-import { Heading } from "../common/Heading";
 
 interface LandingPageProps {
   currentPage: LinkItem;
@@ -18,9 +17,6 @@ const LandingPage = ({ currentPage }: LandingPageProps) => {
           transition={{ duration: 0.25, ease: "easeInOut" }}
           className="min-w-lg px-4 mx-auto"
         >
-          {/* <div className="text-left px-2">
-            <Heading level={2}>{currentPage.label}</Heading>
-          </div> */}
           {currentPage.component}
         </motion.div>
       </AnimatePresence>
