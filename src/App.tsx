@@ -11,10 +11,25 @@ function App() {
     linkList.find((link) => link.label === selectedLabel) || linkList[0];
 
   return (
-    <>
+    <div
+      style={{
+        display: "flex",
+        width: "100%",
+        height: "100vh",
+      }}
+    >
       <Sidebar onSelect={setSelectedLabel} />
-      <LandingPage currentPage={currentLink} />
-    </>
+      <div
+        style={{
+          flexGrow: 1,
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <LandingPage currentPage={currentLink} />
+      </div>
+    </div>
   );
 }
 

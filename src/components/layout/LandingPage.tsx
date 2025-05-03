@@ -16,10 +16,11 @@ const LandingPage = ({ currentPage }: LandingPageProps) => {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -10 }}
           transition={{ duration: 0.25, ease: "easeInOut" }}
+          className="min-w-lg px-4 mx-auto"
         >
-          <div className="text-left px-2">
+          {/* <div className="text-left px-2">
             <Heading level={2}>{currentPage.label}</Heading>
-          </div>
+          </div> */}
           {currentPage.component}
         </motion.div>
       </AnimatePresence>

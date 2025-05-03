@@ -18,6 +18,7 @@ A modern, responsive task management application built with **React**, **Vite**,
 - [Motion](https://motion.dev/)
 - [Lucide Icons](https://lucide.dev/)
 - [Inter Font](https://fonts.google.com/specimen/Inter)
+- [React Loading Skeleton](https://www.npmjs.com/package/react-loading-skeleton)
 
 ## Getting Started
 
@@ -27,3 +28,4 @@ npm install
 
 # Start development server
 npm run dev
+```

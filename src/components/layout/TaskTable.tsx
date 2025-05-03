@@ -1,10 +1,6 @@
-import * as React from "react";
 import { Text } from "../common/Text";
 import {
   ColumnDef,
-  ColumnFiltersState,
-  SortingState,
-  VisibilityState,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
@@ -21,17 +17,19 @@ import {
   TableRow,
 } from "../ui/table";
 import { Progress } from "../ui/progress";
+import { useEffect, useState } from "react";
+import { fetchTasks } from "../../services/api";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
-type TaskData = {
+export type TaskData = {
   id: number;
   task: string;
   due: string;
   owner: string;
   status: boolean;
-  progress: number;
+  progress?: number;
 };
-
-const data: TaskData[] = [];
 
 export const columns: ColumnDef<TaskData>[] = [
   {
@@ -86,7 +84,7 @@ export const columns: ColumnDef<TaskData>[] = [
     },
     cell: ({ row }) => {
       const status = row.getValue("status");
-      const statusColor = status ? "bg-brand" : "bg-secondary";
+      const statusColor = status ? "bg-secondary" : "bg-brand";
       const statusText = status ? "No status" : "On track";
       return (
         <div className="flex items-center gap-2">
@@ -118,34 +116,42 @@ export const columns: ColumnDef<TaskData>[] = [
 ];
 
 export function TaskTable() {
-  const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  );
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({});
-  const [rowSelection, setRowSelection] = React.useState({});
+  const [data, setTasks] = useState<TaskData[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const loadTasks = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const data = await fetchTasks();
+        console.log("Fetched tasks:", data);
+        setTasks(data);
+      } catch (err: any) {
+        setError(err.message || "Failed to fetch tasks");
+        setTasks([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadTasks();
+  }, []);
 
   const table = useReactTable({
     data,
     columns,
-    onSortingChange: setSorting,
-    onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
-    onColumnVisibilityChange: setColumnVisibility,
-    onRowSelectionChange: setRowSelection,
-    state: {
-      sorting,
-      columnFilters,
-      columnVisibility,
-      rowSelection,
-    },
   });
 
-  return (
+  return loading ? (
+    <div>
+      <Skeleton count={5} className="w-full" />
+    </div>
+  ) : (
     <div className="w-full">
       <div className="flex items-center py-4"></div>
       <div className="rounded-[4px] border border-secondary">
