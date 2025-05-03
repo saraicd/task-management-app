@@ -1,7 +1,7 @@
-import { Home, AlarmClockCheck, UsersRound, Clock8, Moon } from "lucide-react";
+import { Home, AlarmClockCheck, UsersRound, Clock8 } from "lucide-react";
 import { motion } from "framer-motion";
-import { Text } from "../common/Text";
 import { useState } from "react";
+import { DarkModeToggle } from "./ThemeToggle";
 
 const linkList = [
   { icon: Home, label: "Home", component: <></> },
@@ -12,14 +12,15 @@ const linkList = [
 
 const Sidebar = () => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [selected, setSelected] = useState("Home");
 
   return (
     <motion.div
-      initial={{ x: "-100%" }} // starts off-screen to the left
-      animate={{ x: 0 }} // animates into view
+      initial={{ x: "-100%" }}
+      animate={{ x: 0 }}
       transition={{ duration: 1, ease: "easeOut" }}
       whileHover={{ width: "250px" }}
-      className="bg-gray-900 text-white fixed top-0 left-0 bottom-0 flex flex-col items-center py-6 overflow-hidden shadow-lg"
+      className="bg-tertiary dark:bg-black text-primary fixed top-0 left-0 bottom-0 flex flex-col items-center py-6 overflow-hidden border-r border-secondary"
       onHoverStart={() => setIsExpanded(true)}
       onHoverEnd={() => setIsExpanded(false)}
     >
@@ -27,23 +28,29 @@ const Sidebar = () => {
         {linkList.map(({ icon: Icon, label }) => (
           <li
             key={label}
-            className="relative flex items-center space-x-2 group hover:scale-105"
+            className="relative flex items-center group hover:scale-103"
           >
-            <div className="flex items-center space-x-2 cursor-pointer">
+            <button
+              onClick={() => setSelected(label)}
+              className={`flex items-center w-full text-left px-2 py-1 rounded transition-colors whitespace-nowrap cursor-pointer ${
+                selected === label ? "bg-clicked text-brand" : "text-primary"
+              }`}
+            >
               <Icon className="w-4 h-4" />
-              {isExpanded && (
-                <span className="whitespace-nowrap overflow-hidden ">
-                  <Text fontWeight="400">{label}</Text>
-                </span>
-              )}
-            </div>
+              <motion.span
+                initial={{ opacity: 0 }}
+                animate={{ opacity: isExpanded ? 1 : 0 }}
+                transition={{ duration: 0.3 }}
+                className="ml-2"
+              >
+                {isExpanded ? label : label.charAt(0)}
+              </motion.span>
+            </button>
           </li>
         ))}
       </ul>
       <div className="mt-auto">
-        <button>
-          <Moon></Moon>
-        </button>
+        <DarkModeToggle />
       </div>
     </motion.div>
   );

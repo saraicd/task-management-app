@@ -15,8 +15,6 @@ function App() {
       >
         <Heading>Task Manager App</Heading>
       </motion.div>
-      <Heading level={2}>Experimental Project</Heading>
-      <Heading level={3}>Under Construction</Heading>
     </>
   );
 }

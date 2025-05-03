@@ -1,24 +1,22 @@
 /** @type {import('tailwindcss').Config} */
+import defaultTheme from "tailwindcss/defaultTheme";
 
 export default {
-    content: [
-      './index.html',
-      './src/**/*.{js,ts,jsx,tsx}',
-    ],
-    theme: {
-      extend: {
-        fontFamily: {
-            inter: ['Inter', 'sans-serif'],
-          },
-        colors: {
-          primary: '#0A2540', 
-          brand: '#543AFD', 
-          secondary: '#B6C0CD', 
-          tertiary: '#EBEEF1',
-          error: '#DC2626', 
-        },
+  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
+  theme: {
+    extend: {
+      fontFamily: {
+        inter: ["Inter", "sans-serif"],
+      },
+      colors: {
+        primary: "var(--color-primary)",
+        secondary: "var(--color-secondary)",
+        brand: "var(--color-brand)",
+        tertiary: "var(--color-tertiary)",
+        error: "var(--color-error)",
       },
     },
-    darkMode: 'class',
-    plugins: [],
-}
+  },
+  darkMode: "class",
+  plugins: [],
+};
