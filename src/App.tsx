@@ -1,23 +1,23 @@
-import './App.css'
-import { motion } from "framer-motion"
-import { Heading } from './components/common/Heading';
+import Sidebar from "./components/layout/Sidebar";
+import "./App.css";
+import { useState } from "react";
+import LandingPage from "./components/layout/LandingPage";
+import { linkList } from "./data/Navigation";
 
 function App() {
+  const [selectedLabel, setSelectedLabel] = useState("Home");
+
+  const currentLink =
+    linkList.find((link) => link.label === selectedLabel) || linkList[0];
 
   return (
-    <>
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="text-4xl font-bold text-center mt-10"
-      >
-        <Heading>Task Manager App</Heading>
-      </motion.div>
-      <Heading level={2}>Experimental Project</Heading>
-      <Heading level={3}>Under Construction</Heading>
-    </>
-  )
+    <div className="flex w-full h-screen">
+      <Sidebar onSelect={setSelectedLabel} />
+      <div className="flex-grow flex items-center justify-center">
+        <LandingPage currentPage={currentLink} />
+      </div>
+    </div>
+  );
 }
 
 export default App;

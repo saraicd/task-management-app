@@ -1,15 +1,29 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  --color-primary: #0a2540;
+  --color-secondary: #b6c0cd;
+  --color-brand: #543afd;
+  --color-tertiary: #ebeef1;
+  --color-error: #dc2626;
+  --color-black: white;
+}
+
+.dark {
+  --color-primary: #ebeef1;
+  --color-tertiary: #0a2540;
+  --color-black: #000000;
+}
 
 #root {
-  max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+body {
+  background-color: var(--color-black);
 }
-
