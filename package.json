@@ -7,6 +7,7 @@
     "import": "./dist/index.esm.js",
     "require": "./dist/index.js"
   },
+  "homepage": "https://saraicd.github.io/task-management-app/",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
