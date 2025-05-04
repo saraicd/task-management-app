@@ -8,7 +8,6 @@ on:
 
 jobs:
   lint:
-    if: github.ref == 'refs/heads/development'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
