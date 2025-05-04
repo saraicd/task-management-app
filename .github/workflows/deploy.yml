@@ -1,11 +1,14 @@
 name: Deploy to GitHub Pages
+
 on:
   push:
     branches:
       - main
       - development
+
 jobs:
-  deploy:
+  lint:
+    if: github.ref == 'refs/heads/development'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -18,6 +21,35 @@ jobs:
 
       - name: Install dependencies
         run: npm install
+
+      - name: Run linting
+        run: npm run lint
+        continue-on-error: true
+  deploy:
+    needs: lint
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "16"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Install polyfill plugin
+        run: npm install --save-dev node-polyfill-webpack-plugin
+
+      - name: Update Vite config (if needed)
+        run: |
+          echo "import { defineConfig } from 'vite';" >> vite.config.js
+          echo "import { nodePolyfills } from 'node-polyfill-webpack-plugin';" >> vite.config.js
+          echo "" >> vite.config.js
+          echo "export default defineConfig({ plugins: [nodePolyfills()] });" >> vite.config.js
 
       - name: Build the app
         run: npm run build
