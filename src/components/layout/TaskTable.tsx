@@ -208,6 +208,11 @@ export function TaskTable() {
           </TableBody>
         </Table>
       </div>
+      {error && (
+        <div className="text-error mb-4 p-2 border border-error rounded">
+          Error: {error}
+        </div>
+      )}
     </div>
   );
 }
