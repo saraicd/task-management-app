@@ -1,5 +1,4 @@
 name: Deploy to GitHub Pages
-
 on:
   push:
     branches:
@@ -25,34 +24,45 @@ jobs:
       - name: Run linting
         run: npm run lint
         continue-on-error: true
-  deploy:
-    needs: lint
-    if: github.ref == 'refs/heads/main'
+
+  build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [16]
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up Node.js
+      - name: Set up Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
-          node-version: "16"
+          node-version: ${{ matrix.node-version }}
 
       - name: Install dependencies
         run: npm install
 
-      - name: Install polyfill plugin
-        run: npm install --save-dev node-polyfill-webpack-plugin
-
-      - name: Update Vite config (if needed)
-        run: |
-          echo "import { defineConfig } from 'vite';" >> vite.config.js
-          echo "import { nodePolyfills } from 'node-polyfill-webpack-plugin';" >> vite.config.js
-          echo "" >> vite.config.js
-          echo "export default defineConfig({ plugins: [nodePolyfills()] });" >> vite.config.js
-
       - name: Build the app
         run: npm run build
+        env:
+          NODE_OPTIONS: "--openssl-legacy-provider"
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-output
+          path: dist
+
+  deploy:
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download build artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: build-output
+          path: dist
 
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4.4.0
