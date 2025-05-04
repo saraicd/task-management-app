@@ -40,9 +40,6 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Install polyfill plugin
-        run: npm install --save-dev node-polyfill-webpack-plugin
-
       - name: Update Vite config (if needed)
         run: |
           echo "import { defineConfig } from 'vite';" >> vite.config.js
