@@ -7,4 +7,7 @@ import { nodePolyfills } from "vite-plugin-node-polyfills";
 export default defineConfig({
   base: "/task-management-app/",
   plugins: [react(), tailwindcss(), nodePolyfills()],
+  build: {
+    outDir: "dist",
+  },
 });
