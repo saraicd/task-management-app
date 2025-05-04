@@ -28,6 +28,9 @@ jobs:
     needs: lint
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      pages: write
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
