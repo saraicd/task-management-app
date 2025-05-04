@@ -20,10 +20,14 @@
 
 #root {
   margin: 0 auto;
-  padding: 2rem;
+  padding: 0 6rem;
   text-align: center;
 }
 
 body {
+  background-color: var(--color-black);
+}
+
+.edit-side-bar {
   background-color: var(--color-black);
 }

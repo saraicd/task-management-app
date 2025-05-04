@@ -6,7 +6,7 @@ import {
   LucideIcon,
 } from "lucide-react";
 import Welcome from "../components/layout/Welcome";
-import TaskTable from "../components/layout/TaskTable";
+import { Tasks } from "../components/layout/Tasks";
 
 export type LinkItem = {
   icon: LucideIcon;
@@ -20,7 +20,7 @@ export const linkList: LinkItem[] = [
   {
     icon: AlarmClockCheck,
     label: "Tasks",
-    component: <TaskTable />,
+    component: <Tasks />,
     disabeld: false,
   },
   { icon: UsersRound, label: "People", component: <></>, disabeld: true },

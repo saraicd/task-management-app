@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
-import { DarkModeToggle } from "./ThemeToggle";
+import { DarkModeToggle } from "../common/ThemeToggle";
 import { Button } from "../ui/button";
 import { linkList } from "../../data/Navigation";
 
@@ -18,23 +18,20 @@ const Sidebar = ({ onSelect }: { onSelect: (component: string) => void }) => {
       initial={{ x: "-100%" }}
       animate={{ x: 0 }}
       transition={{ duration: 1, ease: "easeOut" }}
-      whileHover={{ width: "250px" }}
-      className="bg-tertiary dark:bg-black text-primary fixed top-0 left-0 bottom-0 flex flex-col items-center py-6 overflow-hidden border-r border-secondary"
+      whileHover={{ width: "220px" }}
+      className="bg-tertiary dark:bg-black text-primary fixed top-0 left-0 bottom-0 flex flex-col items-center overflow-hidden border-r border-secondary"
       onHoverStart={() => setIsExpanded(true)}
       onHoverEnd={() => setIsExpanded(false)}
     >
       <ul className="space-y-2 w-full pt-6 px-4">
         {linkList.map(({ icon: Icon, label, disabeld }) => (
-          <li
-            key={label}
-            className="relative flex items-center group hover:scale-103"
-          >
+          <li key={label} className="relative flex items-center group">
             <Button
               variant="ghost"
               key={label}
               disabled={disabeld}
               onClick={() => handleClick(label)}
-              className={`flex items-center justify-start w-full text-left px-2 py-1 rounded transition-colors whitespace-nowrap cursor-pointer ${
+              className={`flex items-center justify-start w-full text-left px-2 py-1 rounded hover:text-secondary transition-colors whitespace-nowrap cursor-pointer ${
                 selected === label ? "bg-clicked text-brand" : "text-primary"
               }`}
             >
