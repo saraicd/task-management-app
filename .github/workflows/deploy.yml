@@ -40,19 +40,11 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Update Vite config (if needed)
-        run: |
-          echo "import { defineConfig } from 'vite';" >> vite.config.js
-          echo "import { nodePolyfills } from 'node-polyfill-webpack-plugin';" >> vite.config.js
-          echo "" >> vite.config.js
-          echo "export default defineConfig({ plugins: [nodePolyfills()] });" >> vite.config.js
-
       - name: Build the app
         run: npm run build
 
       - name: Deploy to GitHub Pages
-        uses: JamesIves/github-pages-deploy-action@v4.4.0
+        uses: actions/deploy-pages@v2
         with:
-          branch: gh-pages
-          folder: dist
-          token: ${{ secrets.GITHUB_TOKEN }}
+          artifact_dir: dist
+          github_token: ${{ secrets.GITHUB_TOKEN }}
