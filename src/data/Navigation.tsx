@@ -23,6 +23,16 @@ export const linkList: LinkItem[] = [
     component: <Tasks />,
     disabeld: false,
   },
-  { icon: UsersRound, label: "People", component: <></>, disabeld: true },
-  { icon: Clock8, label: "Time tracking", component: <></>, disabeld: true },
+  {
+    icon: UsersRound,
+    label: "People",
+    component: <Welcome />,
+    disabeld: false,
+  },
+  {
+    icon: Clock8,
+    label: "Time tracking",
+    component: <Welcome />,
+    disabeld: false,
+  },
 ];

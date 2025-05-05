@@ -15,7 +15,7 @@ const LandingPage = ({ currentPage }: LandingPageProps) => {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -10 }}
           transition={{ duration: 0.25, ease: "easeInOut" }}
-          className="min-w-lg px-4 mx-auto"
+          className="min-w-lg px-4 pt-12 mx-auto"
         >
           {currentPage.component}
         </motion.div>

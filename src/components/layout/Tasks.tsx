@@ -7,7 +7,12 @@ export function Tasks() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [editingTaskId, setEditingTaskId] = useState<number | null>(null);
 
-  const handleEditTask = (taskId: number) => {
+  const handleEditTask = (taskId: number | undefined) => {
+    if (!taskId) {
+      setEditingTaskId(null);
+      setIsSidebarOpen(true);
+      return;
+    }
     setEditingTaskId(taskId);
     setIsSidebarOpen(true);
   };

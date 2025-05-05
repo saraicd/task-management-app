@@ -31,15 +31,17 @@ export function EditSidebar({
   onSave,
 }: EditSidebarProps) {
   const [taskData, setTaskData] = useState<TaskData | null>(null);
+  const [editingMode, setEditingMode] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [formErrors, setFormErrors] = useState<string[]>([]);
   const [progress, setProgress] = useState([55]);
   const minDate = new Date().toISOString().split("T")[0];
 
-  // Fetch task data when the sidebar opens or the taskId changes
   useEffect(() => {
     if (isOpen && taskId !== null) {
+      setEditingMode(true);
       setIsSaving(false);
       setIsLoading(true);
       setError(null);
@@ -60,6 +62,7 @@ export function EditSidebar({
           setIsLoading(false);
         });
     } else {
+      setIsSaving(false);
       setTaskData(null);
       setError(null);
     }
@@ -110,7 +113,9 @@ export function EditSidebar({
       >
         <div className="flex justify-between items-center mb-6">
           <Heading level={3}>
-            <div className="capitalize">{taskData?.task}</div>
+            <div className="capitalize">
+              {editingMode ? taskData?.task : "New Task"}
+            </div>
           </Heading>
           <button
             onClick={onClose}
@@ -140,9 +145,17 @@ export function EditSidebar({
             </div>
           </div>
         )}
-        {error && <p className="text-red-500">{error}</p>}
-
-        {taskData && !isLoading && !error && (
+        {error && <p className="text-error">{error}</p>}
+        {formErrors.length > 0 && (
+          <div className="mb-4">
+            <ul className="text-error text-sm list-disc pl-5">
+              {formErrors.map((error, index) => (
+                <li key={index}>{error}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+        {!isLoading && !error && (
           <form onSubmit={handleFormSubmit} className="space-y-5">
             <div className="grid w-full items-center gap-1.5">
               <Label htmlFor="due">Due</Label>
@@ -151,7 +164,7 @@ export function EditSidebar({
                 className="border-secondary text-[11px] cursor-pointer text-primary"
                 id="due"
                 name="due"
-                value={formatToYYYYMMDD(taskData.due)}
+                value={formatToYYYYMMDD(taskData?.due)}
                 placeholder="Pick a Date"
                 onChange={handleStandardInputChange}
                 min={minDate}
@@ -164,14 +177,14 @@ export function EditSidebar({
                 className="border-secondary text-[11px] text-primary"
                 id="owner"
                 name="owner"
-                value={taskData.owner}
+                value={taskData?.owner}
                 onChange={handleStandardInputChange}
               />
             </div>
             <div className="grid w-full items-center gap-1.5">
               <Label htmlFor="status-select">Status</Label>{" "}
               <Select
-                value={taskData.status ? "true" : "false"}
+                value={taskData?.status ? "true" : "false"}
                 onValueChange={(value) => {
                   setTaskData((prevData) => {
                     if (!prevData) return null;
@@ -226,21 +239,32 @@ export function EditSidebar({
               >
                 Cancel
               </Button>
-              <Button
-                type="button"
-                variant="outline"
-                onClick={handleDelete}
-                disabled={!taskId || isLoading}
-                className="bg-white text-secondary dark:text-black hover:text-error dark:hover:text-error  cursor-pointer"
-              >
-                Delete
-              </Button>
+              {editingMode ?? (
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={handleDelete}
+                  disabled={!taskId || isLoading}
+                  className="bg-white text-secondary dark:text-black hover:text-error dark:hover:text-error  cursor-pointer"
+                >
+                  Delete
+                </Button>
+              )}
               <Button
                 type="submit"
                 disabled={isSaving}
                 className="bg-brand text-white hover:bg-secondary cursor-pointer"
               >
-                {isSaving ? "Saving" : "Update Task"}
+                {isSaving ? (
+                  <div className="flex items-center gap-2">
+                    <span className="animate-spin rounded-full h-4 w-4 border-t-2 border-white"></span>
+                    Saving
+                  </div>
+                ) : editingMode ? (
+                  "Update Task"
+                ) : (
+                  "Create Task"
+                )}
               </Button>
             </div>
           </form>
