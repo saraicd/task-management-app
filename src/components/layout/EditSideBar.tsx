@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { CircleX } from "lucide-react";
+import { CircleX, Info } from "lucide-react";
 import { TaskData } from "../common/TaskTable";
 import { fetchTaskById } from "../../services/api";
 import { Label } from "../ui/label";
@@ -15,7 +15,10 @@ import {
 } from "../ui/select";
 import { Heading } from "../common/Heading";
 import Skeleton from "react-loading-skeleton";
-import { formatToDDMMYYYY, formatToYYYYMMDD } from "../../utils/date";
+import { Alert, AlertDescription } from "../ui/alert";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { toast } from "sonner";
 
 interface EditSidebarProps {
   isOpen: boolean;
@@ -37,10 +40,10 @@ export function EditSidebar({
   const [error, setError] = useState<string | null>(null);
   const [formErrors, setFormErrors] = useState<string[]>([]);
   const [progress, setProgress] = useState([55]);
-  const minDate = new Date().toISOString().split("T")[0];
   const sidebarRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    setFormErrors([]);
     if (isOpen && taskId !== null) {
       setEditingMode(true);
       setIsSaving(false);
@@ -79,28 +82,68 @@ export function EditSidebar({
   const handleStandardInputChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    const { name, value, type } = event.target;
+    const { name, value } = event.target;
 
     setTaskData((prevData) => {
-      if (!prevData) return null;
       let valueToStore = value;
-      if (name === "due" && type === "date") {
-        valueToStore = formatToDDMMYYYY(value);
-      }
 
-      return { ...prevData, [name]: valueToStore };
+      return {
+        ...prevData,
+        [name]: valueToStore,
+      } as TaskData;
     });
+  };
+
+  const handleDateChange = (date: Date | null) => {
+    if (date) {
+      setTaskData(
+        (prevData) =>
+          ({
+            ...prevData,
+            due: date,
+          } as TaskData)
+      );
+    }
   };
 
   const handleDelete = () => {
     if (taskId !== null) {
-      //TODO: Implement delete functionality
+      toast.info(`Tasks can't be deleted at the moment!`, {
+        duration: 3000,
+        style: {
+          backgroundColor: "var(--color-black)",
+          color: "var(--color-brand)",
+          borderColor: "var(--color-brand)",
+          fontSize: "11px",
+          fontFamily: "var(--font-family)",
+        },
+        icon: <Info className="w-4 h-4" />,
+      });
     }
+  };
+
+  const validateForm = () => {
+    const errors = [];
+    if (!taskData?.task?.trim()) {
+      errors.push("Task name is required.");
+    }
+    if (!taskData?.due) {
+      errors.push("Due date is required.");
+    }
+    if (!taskData?.owner?.trim()) {
+      errors.push("Owner is required.");
+    }
+    return errors;
   };
 
   const handleFormSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    setFormErrors([]); // TODO: Validate fields and set errors if any
+    setFormErrors([]);
+    const validationErrors = validateForm();
+    if (validationErrors.length > 0) {
+      setFormErrors(validationErrors);
+      return;
+    }
     setIsSaving(true);
     if (taskData) {
       onSave(taskData);
@@ -143,33 +186,26 @@ export function EditSidebar({
 
         {isLoading && (
           <div className="space-y-5 animate-pulse">
-            <div className="space-y-2">
-              <Skeleton className="h-4 w-[20px]" />
-              <Skeleton className="h-10 w-full" />
-            </div>
-            <div className="space-y-2">
-              <Skeleton className="h-4 w-[20px]" />
-              <Skeleton className="h-10 w-full" />
-            </div>
-            <div className="space-y-2">
-              <Skeleton className="h-4 w-[20px]" />
-              <Skeleton className="h-8 w-full" />
-            </div>
-            <div className="space-y-2">
-              <Skeleton className="h-4 w-[20px]" />
-              <Skeleton className="h-10 w-full" />
-            </div>
+            {[10, 10, 8, 10].map((height, index) => (
+              <div key={index} className="space-y-2">
+                <Skeleton className="h-8 w-[20px]" />
+                <Skeleton className={`h-${height} w-full`} />
+              </div>
+            ))}
           </div>
         )}
         {error && <p className="text-error">{error}</p>}
         {formErrors.length > 0 && (
-          <div className="mb-4">
-            <ul className="text-error text-sm list-disc pl-5">
-              {formErrors.map((error, index) => (
-                <li key={index}>{error}</li>
-              ))}
-            </ul>
-          </div>
+          <Alert variant="destructive" className="mb-4 text-error">
+            <CircleX className="mr-2 h-4 w-4" />
+            <AlertDescription>
+              <ul className="pl-5 text-sm text-left">
+                {formErrors.map((error, index) => (
+                  <li key={index}>{error}</li>
+                ))}
+              </ul>
+            </AlertDescription>
+          </Alert>
         )}
         {!isLoading && !error && (
           <form onSubmit={handleFormSubmit} className="space-y-5">
@@ -189,15 +225,14 @@ export function EditSidebar({
             )}
             <div className="grid w-full items-center gap-1.5">
               <Label htmlFor="due">Due</Label>
-              <Input
-                type="date"
-                className="border-secondary text-[11px] cursor-pointer text-primary"
+              <DatePicker
                 id="due"
-                name="due"
-                value={taskData?.due ? formatToYYYYMMDD(taskData.due) : ""}
-                placeholder="Pick a Date"
-                onChange={handleStandardInputChange}
-                min={minDate}
+                selected={taskData?.due ? new Date(taskData.due) : null}
+                onChange={(date) => handleDateChange(date)}
+                dateFormat="dd-MM-yyyy"
+                minDate={new Date()}
+                placeholderText="Pick a Date"
+                className="border-1 border-secondary text-[11px] cursor-pointer text-primary flex h-9 w-full focus-visible:border-brand rounded-md bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent  file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50"
                 aria-required="true"
               />
             </div>

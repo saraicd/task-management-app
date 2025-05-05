@@ -28,7 +28,7 @@ import { Button } from "../ui/button";
 export type TaskData = {
   id: number;
   task: string;
-  due: string;
+  due: Date;
   owner: string;
   status: boolean;
   progress?: number;

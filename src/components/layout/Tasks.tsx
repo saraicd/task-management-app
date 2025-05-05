@@ -2,6 +2,8 @@ import { useState } from "react";
 import TaskTable, { TaskData } from "../common/TaskTable";
 import { EditSidebar } from "./EditSideBar";
 import { Heading } from "../common/Heading";
+import { toast } from "sonner";
+import { CircleAlert } from "lucide-react";
 
 export function Tasks() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -27,6 +29,20 @@ export function Tasks() {
     console.log("Saving changes for task:", updatedTask);
     setTimeout(() => {
       handleCloseSidebar();
+      toast.warning(
+        `  Changes to ${updatedTask.task} couldn't be saved at the moment!`,
+        {
+          duration: 3000,
+          style: {
+            backgroundColor: "var(--color-black)",
+            color: "var(--color-error)",
+            borderColor: "var(--color-error)",
+            fontSize: "11px",
+            fontFamily: "var(--font-family)",
+          },
+          icon: <CircleAlert className="w-4 h-4" />,
+        }
+      );
     }, 1000);
   };
 

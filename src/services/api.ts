@@ -21,7 +21,7 @@ export const fetchTasks = async (): Promise<TaskData[]> => {
     return apiResponse.map((item) => ({
       id: parseInt(item.id, 10),
       task: item.task || "No Title",
-      due: item.due || "",
+      due: new Date(item.due) || new Date(),
       owner: item.owner || "Unknown",
       status: item.status || false,
       progress: 0,
@@ -54,7 +54,7 @@ export const fetchTaskById = async (id: number): Promise<TaskData | null> => {
     const taskData: TaskData = {
       id: parseInt(apiResponseItem.id, 10),
       task: apiResponseItem.task || "No Title",
-      due: apiResponseItem.due || "",
+      due: new Date(apiResponseItem.due) || new Date(),
       owner: apiResponseItem.owner || "Unknown",
       status: apiResponseItem.status || false,
       progress: 0,
