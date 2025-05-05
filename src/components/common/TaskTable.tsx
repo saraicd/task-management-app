@@ -21,7 +21,9 @@ import { useEffect, useMemo, useState } from "react";
 import { fetchTasks } from "../../services/api";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import { SquarePen } from "lucide-react";
+import { Plus, Search, SquarePen } from "lucide-react";
+import { Input } from "../ui/input";
+import { Button } from "../ui/button";
 
 export type TaskData = {
   id: number;
@@ -33,7 +35,7 @@ export type TaskData = {
 };
 
 interface TaskTableProps {
-  onEditTask: (taskId: number) => void;
+  onEditTask: (taskId: number | undefined) => void;
 }
 
 export function TaskTable({ onEditTask }: TaskTableProps) {
@@ -150,7 +152,6 @@ export function TaskTable({ onEditTask }: TaskTableProps) {
       setError(null);
       try {
         const data = await fetchTasks();
-        console.log("Fetched tasks:", data);
         setTasks(data);
       } catch (err: any) {
         setError(err.message || "Failed to fetch tasks");
@@ -171,15 +172,34 @@ export function TaskTable({ onEditTask }: TaskTableProps) {
     getFilteredRowModel: getFilteredRowModel(),
   });
 
-  return loading ? (
-    <div>
-      <Skeleton count={5} className="w-full" />
-    </div>
-  ) : (
+  return (
     <div className="w-full">
       <div className="flex items-center py-4"></div>
+
+      <div className="flex justify-between items-center mb-4">
+        <div className=" relative">
+          <Input
+            type="search"
+            placeholder="Search tasks"
+            className="w-full p-2 border text-primary border-secondary rounded pr-10"
+            onChange={(e) =>
+              table.getColumn("task")?.setFilterValue(e.target.value)
+            }
+          />
+          <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-secondary cursor-pointer">
+            <Search className="w-4 h-4" />
+          </span>
+        </div>
+        <Button
+          className="ml-4 px-4 py-2 bg-brand text-white rounded hover:bg-secondary cursor-pointer"
+          onClick={() => onEditTask(undefined)}
+        >
+          <Plus />
+          Add Task
+        </Button>
+      </div>
       <div className="rounded-[4px] border border-secondary">
-        <Table className="rounded-md overflow-hidden">
+        <Table className="rounded-md overflow-hidden table-fixed">
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id} className=" border-secondary">
@@ -187,7 +207,7 @@ export function TaskTable({ onEditTask }: TaskTableProps) {
                   return (
                     <TableHead
                       key={header.id}
-                      className=" border-secondary bg-tertiary dark:bg-black text-primary  font-bold"
+                      className=" border-secondary bg-tertiary dark:bg-black text-primary font-bold"
                     >
                       {header.isPlaceholder
                         ? null
@@ -225,7 +245,13 @@ export function TaskTable({ onEditTask }: TaskTableProps) {
                   colSpan={columns.length}
                   className="h-24 text-center text-primary"
                 >
-                  No results.
+                  {loading ? (
+                    <div className="w-full animate-pulse">
+                      <Skeleton count={5} className="flex items-center " />
+                    </div>
+                  ) : (
+                    <div className="min-w-[600px]">No results.</div>
+                  )}
                 </TableCell>
               </TableRow>
             )}

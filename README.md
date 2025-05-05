@@ -29,3 +29,7 @@ npm install
 # Start development server
 npm run dev
 ```
+
+## Deployment
+
+The app is deployed and accessible at: [Task Manager App](https://saraicd.github.io/task-management-app/)
