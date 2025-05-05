@@ -1,6 +1,10 @@
 # Task Manager App
 
-A modern, responsive task management application built with **React**, **Vite**, **TanStack Query**, **TanStack Router**, **ShadCN UI**, and **Tailwind CSS**.
+A simple experimental task management application built with **React**, **Vite**, **TanStack Table**, **ShadCN UI**, and **Tailwind CSS**.
+### Task list Page:
+![image](https://github.com/user-attachments/assets/fb72c8d7-40d8-49cb-a0e6-e818bedd7f83)
+
+
 
 ## Features
 
@@ -12,7 +16,7 @@ A modern, responsive task management application built with **React**, **Vite**,
 ## Tech Stack
 
 - [React + Vite](https://vitejs.dev/)
-- [TanStack Query](https://tanstack.com/)
+- [TanStack Table](https://tanstack.com/)
 - [ShadCN UI](https://ui.shadcn.com/)
 - [Tailwind CSS](https://tailwindcss.com/)
 - [Motion](https://motion.dev/)
