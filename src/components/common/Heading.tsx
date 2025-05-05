@@ -15,5 +15,13 @@ export function Heading({ level = 1, children }: HeadingProps) {
     3: "text-base md:text-lg font-bold leading-[100%] tracking-[0%] font-inter",
   };
 
-  return <Tag className={`${baseStyles} ${sizeStyles[level]}`}>{children}</Tag>;
+  return (
+    <Tag
+      className={`${baseStyles} ${sizeStyles[level]}`}
+      role="heading"
+      aria-level={level}
+    >
+      {children}
+    </Tag>
+  );
 }

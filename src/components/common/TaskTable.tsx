@@ -47,13 +47,11 @@ export function TaskTable({ onEditTask }: TaskTableProps) {
     () => [
       {
         accessorKey: "task",
-        header: () => {
-          return (
-            <Text fontSize="11px" fontWeight="700">
-              Task
-            </Text>
-          );
-        },
+        header: () => (
+          <Text fontSize="11px" fontWeight="700">
+            Task
+          </Text>
+        ),
         cell: ({ row }) => (
           <div className="text-left">
             <Text fontWeight="400">
@@ -64,13 +62,11 @@ export function TaskTable({ onEditTask }: TaskTableProps) {
       },
       {
         accessorKey: "due",
-        header: () => {
-          return (
-            <Text fontSize="11px" fontWeight="700">
-              Due
-            </Text>
-          );
-        },
+        header: () => (
+          <Text fontSize="11px" fontWeight="700">
+            Due
+          </Text>
+        ),
         cell: ({ row }) => (
           <Text fontWeight="400">
             {new Date(row.getValue("due")).toLocaleDateString()}
@@ -79,33 +75,32 @@ export function TaskTable({ onEditTask }: TaskTableProps) {
       },
       {
         accessorKey: "owner",
-        header: () => {
-          return (
-            <Text fontSize="11px" fontWeight="700">
-              Owner
-            </Text>
-          );
-        },
+        header: () => (
+          <Text fontSize="11px" fontWeight="700">
+            Owner
+          </Text>
+        ),
         cell: ({ row }) => (
           <Text fontWeight="400">{row.getValue("owner")}</Text>
         ),
       },
       {
         accessorKey: "status",
-        header: () => {
-          return (
-            <Text fontSize="11px" fontWeight="700">
-              Status
-            </Text>
-          );
-        },
+        header: () => (
+          <Text fontSize="11px" fontWeight="700">
+            Status
+          </Text>
+        ),
         cell: ({ row }) => {
           const status = row.getValue("status");
           const statusColor = status ? "bg-secondary" : "bg-brand";
           const statusText = status ? "No status" : "On track";
           return (
             <div className="flex items-center gap-2">
-              <div className={`w-2 h-2 rounded-full ${statusColor}`} />
+              <div
+                className={`w-2 h-2 rounded-full ${statusColor}`}
+                aria-hidden="true"
+              />
               <Text fontWeight="400">{statusText}</Text>
             </div>
           );
@@ -113,19 +108,18 @@ export function TaskTable({ onEditTask }: TaskTableProps) {
       },
       {
         accessorKey: "progress",
-        header: () => {
-          return (
-            <Text fontSize="11px" fontWeight="700">
-              Progress
-            </Text>
-          );
-        },
+        header: () => (
+          <Text fontSize="11px" fontWeight="700">
+            Progress
+          </Text>
+        ),
         cell: () => {
           const progressValue = Math.floor(Math.random() * 101);
           return (
             <Progress
               value={progressValue}
               style={{ width: "90px", height: "6px" }}
+              aria-label={`Progress: ${progressValue}%`}
             />
           );
         },
@@ -133,14 +127,15 @@ export function TaskTable({ onEditTask }: TaskTableProps) {
       {
         id: "edit",
         header: () => <></>,
-        cell: ({ row }) => {
-          return (
-            <SquarePen
-              className="w-4 h-4 cursor-pointer text-brand hover:text-secondary"
-              onClick={() => onEditTask(row.original.id)}
-            />
-          );
-        },
+        cell: ({ row }) => (
+          <SquarePen
+            className="w-4 h-4 cursor-pointer text-brand hover:text-secondary"
+            onClick={() => onEditTask(row.original.id)}
+            tabIndex={0}
+            role="button"
+            aria-label={`Edit task ${row.original.task}`}
+          />
+        ),
       },
     ],
     [onEditTask]
@@ -177,7 +172,7 @@ export function TaskTable({ onEditTask }: TaskTableProps) {
       <div className="flex items-center py-4"></div>
 
       <div className="flex justify-between items-center mb-4">
-        <div className=" relative">
+        <div className="relative">
           <Input
             type="search"
             placeholder="Search tasks"
@@ -185,14 +180,19 @@ export function TaskTable({ onEditTask }: TaskTableProps) {
             onChange={(e) =>
               table.getColumn("task")?.setFilterValue(e.target.value)
             }
+            aria-label="Search tasks"
           />
-          <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-secondary cursor-pointer">
+          <span
+            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-secondary cursor-pointer"
+            aria-hidden="true"
+          >
             <Search className="w-4 h-4" />
           </span>
         </div>
         <Button
           className="ml-4 px-4 py-2 bg-brand text-white rounded hover:bg-secondary cursor-pointer"
           onClick={() => onEditTask(undefined)}
+          aria-label="Add new task"
         >
           <Plus />
           Add Task
@@ -202,22 +202,21 @@ export function TaskTable({ onEditTask }: TaskTableProps) {
         <Table className="rounded-md overflow-hidden table-fixed">
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id} className=" border-secondary">
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead
-                      key={header.id}
-                      className=" border-secondary bg-tertiary dark:bg-black text-primary font-bold"
-                    >
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                    </TableHead>
-                  );
-                })}
+              <TableRow key={headerGroup.id} className="border-secondary">
+                {headerGroup.headers.map((header) => (
+                  <TableHead
+                    key={header.id}
+                    className="border-secondary bg-tertiary dark:bg-black text-primary font-bold"
+                    scope="col"
+                  >
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                  </TableHead>
+                ))}
               </TableRow>
             ))}
           </TableHeader>
@@ -227,7 +226,7 @@ export function TaskTable({ onEditTask }: TaskTableProps) {
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
-                  className=" border-secondary text-primary"
+                  className="border-secondary text-primary"
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
@@ -246,7 +245,11 @@ export function TaskTable({ onEditTask }: TaskTableProps) {
                   className="h-24 text-center text-primary"
                 >
                   {loading ? (
-                    <div className="w-full animate-pulse">
+                    <div
+                      className="w-full animate-pulse"
+                      aria-live="polite"
+                      aria-busy="true"
+                    >
                       <Skeleton count={5} className="flex items-center " />
                     </div>
                   ) : (
@@ -259,7 +262,10 @@ export function TaskTable({ onEditTask }: TaskTableProps) {
         </Table>
       </div>
       {error && (
-        <div className="text-error mb-4 p-2 border border-error rounded">
+        <div
+          className="text-error mb-4 p-2 border border-error rounded"
+          role="alert"
+        >
           Error: {error}
         </div>
       )}

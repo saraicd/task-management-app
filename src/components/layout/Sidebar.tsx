@@ -15,7 +15,7 @@ const Sidebar = ({ onSelect }: { onSelect: (component: string) => void }) => {
   };
 
   return (
-    <motion.div
+    <motion.nav
       initial={{ x: "-100%" }}
       animate={{ x: 0 }}
       transition={{ duration: 1, ease: "easeOut" }}
@@ -23,6 +23,7 @@ const Sidebar = ({ onSelect }: { onSelect: (component: string) => void }) => {
       className="bg-tertiary dark:bg-black text-primary fixed top-0 left-0 bottom-0 flex flex-col items-center overflow-hidden z-20 dark:border-r"
       onHoverStart={() => setIsExpanded(true)}
       onHoverEnd={() => setIsExpanded(false)}
+      aria-label="Sidebar Navigation"
     >
       <ul className="space-y-2 w-full pt-6 px-4">
         {linkList.map(({ icon: Icon, label, disabeld }) => (
@@ -32,6 +33,7 @@ const Sidebar = ({ onSelect }: { onSelect: (component: string) => void }) => {
               disabled={disabeld}
               onClick={() => handleClick(label)}
               aria-label={label}
+              aria-current={selected === label ? "page" : undefined}
               className={cn(
                 "flex items-center justify-start w-full text-left px-2 py-1 rounded hover:bg-accent hover:text-secondary transition-colors whitespace-nowrap cursor-pointer",
                 selected === label ? "text-brand bg-clicked" : "text-primary",
@@ -52,7 +54,7 @@ const Sidebar = ({ onSelect }: { onSelect: (component: string) => void }) => {
                     }}
                     exit={{ opacity: 0, width: 0, marginLeft: 0 }}
                     transition={{ duration: 0.2, ease: "easeOut" }}
-                    className="overflow-hidden "
+                    className="overflow-hidden"
                   >
                     {label}
                   </motion.span>
@@ -65,7 +67,7 @@ const Sidebar = ({ onSelect }: { onSelect: (component: string) => void }) => {
       <div className="mt-auto pb-6">
         <DarkModeToggle />
       </div>
-    </motion.div>
+    </motion.nav>
   );
 };
 

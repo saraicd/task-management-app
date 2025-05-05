@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { CircleX } from "lucide-react";
 import { TaskData } from "../common/TaskTable";
 import { fetchTaskById } from "../../services/api";
@@ -38,6 +38,7 @@ export function EditSidebar({
   const [formErrors, setFormErrors] = useState<string[]>([]);
   const [progress, setProgress] = useState([55]);
   const minDate = new Date().toISOString().split("T")[0];
+  const sidebarRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (isOpen && taskId !== null) {
@@ -68,6 +69,12 @@ export function EditSidebar({
       setError(null);
     }
   }, [isOpen, taskId]);
+
+  useEffect(() => {
+    if (isOpen) {
+      sidebarRef.current?.focus();
+    }
+  }, [isOpen]);
 
   const handleStandardInputChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -107,14 +114,20 @@ export function EditSidebar({
           isOpen ? "opacity-70" : "opacity-0 pointer-events-none"
         }`}
         onClick={onClose}
+        aria-hidden="true"
       ></div>
       <aside
+        ref={sidebarRef}
+        tabIndex={-1}
+        role="dialog"
+        aria-labelledby="edit-sidebar-heading"
+        aria-hidden={!isOpen}
         className={`edit-side-bar fixed top-0 right-0 h-full w-80 md:w-96 bg-white shadow-lg p-6 z-50 transform transition-transform duration-300 ease-in-out ${
           isOpen ? "translate-x-0" : "translate-x-full"
-        } `}
+        }`}
       >
         <div className="flex justify-between items-center mb-6">
-          <Heading level={3}>
+          <Heading level={3} id="edit-sidebar-heading">
             <div className="capitalize">
               {editingMode ? taskData?.task : "New Task"}
             </div>
@@ -122,6 +135,7 @@ export function EditSidebar({
           <button
             onClick={onClose}
             className="text-primary hover:text-secondary dark:hover:text-brand cursor-pointer"
+            aria-label="Close sidebar"
           >
             <CircleX size={24} />
           </button>
@@ -169,6 +183,7 @@ export function EditSidebar({
                   name="task"
                   value={taskData?.task}
                   onChange={handleStandardInputChange}
+                  aria-required="true"
                 />
               </div>
             )}
@@ -183,6 +198,7 @@ export function EditSidebar({
                 placeholder="Pick a Date"
                 onChange={handleStandardInputChange}
                 min={minDate}
+                aria-required="true"
               />
             </div>
             <div className="grid w-full items-center gap-1.5">
@@ -194,6 +210,7 @@ export function EditSidebar({
                 name="owner"
                 value={taskData?.owner}
                 onChange={handleStandardInputChange}
+                aria-required="true"
               />
             </div>
             <div className="grid w-full items-center gap-1.5">
@@ -210,6 +227,7 @@ export function EditSidebar({
                 <SelectTrigger
                   id="status-select"
                   className="border-secondary w-full text-[11px] cursor-pointer focus:border-brand text-primary"
+                  aria-required="true"
                 >
                   <SelectValue placeholder="Select status..." />
                 </SelectTrigger>
@@ -238,11 +256,14 @@ export function EditSidebar({
                 id="progress"
                 name="progress"
                 value={progress}
-                // TODO: Fix this to use the progress state
                 onValueChange={(value) => setProgress(value)}
                 max={100}
                 step={1}
                 className="w-full cursor-pointer"
+                aria-valuemin={0}
+                aria-valuemax={100}
+                aria-valuenow={progress[0]}
+                aria-label="Progress"
               />
             </div>
             <div className="mt-12 flex justify-end gap-3 pt-4">

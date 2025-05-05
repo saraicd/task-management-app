@@ -16,6 +16,8 @@ const LandingPage = ({ currentPage }: LandingPageProps) => {
           exit={{ opacity: 0, y: -10 }}
           transition={{ duration: 0.25, ease: "easeInOut" }}
           className="min-w-lg px-4 pt-12 mx-auto"
+          role="main"
+          aria-labelledby="page-title"
         >
           {currentPage.component}
         </motion.div>

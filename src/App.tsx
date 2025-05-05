@@ -11,12 +11,15 @@ function App() {
     linkList.find((link) => link.label === selectedLabel) || linkList[0];
 
   return (
-    <div className="flex w-full h-screen">
+    <main className="flex w-full h-screen">
       <Sidebar onSelect={setSelectedLabel} />
-      <div className="flex-grow flex items-center justify-center">
+      <section
+        className="flex-grow flex items-center justify-center"
+        aria-label="Main Content"
+      >
         <LandingPage currentPage={currentLink} />
-      </div>
-    </div>
+      </section>
+    </main>
   );
 }
 

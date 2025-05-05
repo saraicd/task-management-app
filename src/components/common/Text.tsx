@@ -16,6 +16,7 @@ export const Text: React.FC<TextProps> = ({
     <span
       className="font-inter text-primary  "
       style={{ fontWeight, fontSize }}
+      role="text"
     >
       {children}
     </span>

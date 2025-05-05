@@ -31,17 +31,19 @@ export function Tasks() {
   };
 
   return (
-    <div className="relative min-h-screen">
-      <div className="pt-4 pb-0 text-left">
+    <main className="relative min-h-screen" role="main">
+      <header className="pt-4 pb-0 text-left">
         <Heading level={3}>Task List</Heading>
-      </div>
-      <TaskTable onEditTask={handleEditTask} />
+      </header>
+      <section>
+        <TaskTable onEditTask={handleEditTask} />
+      </section>
       <EditSidebar
         isOpen={isSidebarOpen}
         taskId={editingTaskId}
         onClose={handleCloseSidebar}
         onSave={handleSaveChanges}
       />
-    </div>
+    </main>
   );
 }
