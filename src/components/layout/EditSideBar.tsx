@@ -165,7 +165,7 @@ export function EditSidebar({
         role="dialog"
         aria-labelledby="edit-sidebar-heading"
         aria-hidden={!isOpen}
-        className={`edit-side-bar fixed top-0 right-0 h-full w-80 md:w-96 bg-white shadow-lg p-6 z-50 transform transition-transform duration-300 ease-in-out ${
+        className={`edit-side-bar fixed top-0 right-0 h-full w-80 md:w-96 bg-white shadow-lg p-6 z-50 transform transition-transform duration-300 ease-in-out overflow-y-auto ${
           isOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >

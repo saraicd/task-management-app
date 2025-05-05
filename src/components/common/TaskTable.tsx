@@ -6,6 +6,7 @@ import {
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
+  RowData,
   useReactTable,
 } from "@tanstack/react-table";
 import {
@@ -24,6 +25,7 @@ import "react-loading-skeleton/dist/skeleton.css";
 import { Plus, Search, SquarePen } from "lucide-react";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
+import { cn } from "../../lib/utils";
 
 export type TaskData = {
   id: number;
@@ -33,6 +35,12 @@ export type TaskData = {
   status: boolean;
   progress?: number;
 };
+
+declare module "@tanstack/react-table" {
+  interface ColumnMeta<TData extends RowData, TValue> {
+    className?: string;
+  }
+}
 
 interface TaskTableProps {
   onEditTask: (taskId: number | undefined) => void;
@@ -47,13 +55,17 @@ export function TaskTable({ onEditTask }: TaskTableProps) {
     () => [
       {
         accessorKey: "task",
+        enableHiding: false,
         header: () => (
           <Text fontSize="11px" fontWeight="700">
             Task
           </Text>
         ),
         cell: ({ row }) => (
-          <div className="text-left">
+          <div
+            className="text-left cursor-pointer"
+            onClick={() => onEditTask(row.original.id)}
+          >
             <Text fontWeight="400">
               <div className="capitalize">{row.getValue("task")}</div>
             </Text>
@@ -62,6 +74,9 @@ export function TaskTable({ onEditTask }: TaskTableProps) {
       },
       {
         accessorKey: "due",
+        meta: {
+          className: "hidden sm:table-cell text-center",
+        },
         header: () => (
           <Text fontSize="11px" fontWeight="700">
             Due
@@ -75,6 +90,9 @@ export function TaskTable({ onEditTask }: TaskTableProps) {
       },
       {
         accessorKey: "owner",
+        meta: {
+          className: "hidden sm:table-cell text-center",
+        },
         header: () => (
           <Text fontSize="11px" fontWeight="700">
             Owner
@@ -86,6 +104,9 @@ export function TaskTable({ onEditTask }: TaskTableProps) {
       },
       {
         accessorKey: "status",
+        meta: {
+          className: "hidden sm:table-cell text-center",
+        },
         header: () => (
           <Text fontSize="11px" fontWeight="700">
             Status
@@ -126,6 +147,9 @@ export function TaskTable({ onEditTask }: TaskTableProps) {
       },
       {
         id: "edit",
+        meta: {
+          className: "hidden sm:table-cell text-center",
+        },
         header: () => <></>,
         cell: ({ row }) => (
           <SquarePen
@@ -206,7 +230,10 @@ export function TaskTable({ onEditTask }: TaskTableProps) {
                 {headerGroup.headers.map((header) => (
                   <TableHead
                     key={header.id}
-                    className="border-secondary bg-tertiary dark:bg-black text-primary font-bold"
+                    className={cn(
+                      "border-secondary bg-tertiary dark:bg-black text-primary font-bold",
+                      header.column.columnDef.meta?.className
+                    )}
                     scope="col"
                   >
                     {header.isPlaceholder
@@ -229,7 +256,10 @@ export function TaskTable({ onEditTask }: TaskTableProps) {
                   className="border-secondary text-primary"
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
+                    <TableCell
+                      key={cell.id}
+                      className={cn(cell.column.columnDef.meta?.className)}
+                    >
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()

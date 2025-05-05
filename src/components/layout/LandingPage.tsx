@@ -15,7 +15,7 @@ const LandingPage = ({ currentPage }: LandingPageProps) => {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -10 }}
           transition={{ duration: 0.25, ease: "easeInOut" }}
-          className="min-w-lg px-4 pt-12 mx-auto"
+          className="max-w-full px-4 pt-12 mx-auto sm:min-w-lg sm:px-6"
           role="main"
           aria-labelledby="page-title"
         >
