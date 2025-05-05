@@ -127,7 +127,7 @@ export function EditSidebar({
         }`}
       >
         <div className="flex justify-between items-center mb-6">
-          <Heading level={3} id="edit-sidebar-heading">
+          <Heading level={3}>
             <div className="capitalize">
               {editingMode ? taskData?.task : "New Task"}
             </div>
