@@ -35,7 +35,7 @@ export type TaskData = {
 };
 
 interface TaskTableProps {
-  onEditTask: (taskId: number) => void;
+  onEditTask: (taskId: number | undefined) => void;
 }
 
 export function TaskTable({ onEditTask }: TaskTableProps) {
@@ -152,7 +152,6 @@ export function TaskTable({ onEditTask }: TaskTableProps) {
       setError(null);
       try {
         const data = await fetchTasks();
-        console.log("Fetched tasks:", data);
         setTasks(data);
       } catch (err: any) {
         setError(err.message || "Failed to fetch tasks");
@@ -173,11 +172,7 @@ export function TaskTable({ onEditTask }: TaskTableProps) {
     getFilteredRowModel: getFilteredRowModel(),
   });
 
-  return loading ? (
-    <div className="space-y-15 animate-pulse">
-      <Skeleton count={5} className="w-full" />
-    </div>
-  ) : (
+  return (
     <div className="w-full">
       <div className="flex items-center py-4"></div>
 
@@ -186,18 +181,18 @@ export function TaskTable({ onEditTask }: TaskTableProps) {
           <Input
             type="search"
             placeholder="Search tasks"
-            className="w-full p-2 border border-secondary rounded pr-10"
+            className="w-full p-2 border text-primary border-secondary rounded pr-10"
             onChange={(e) =>
               table.getColumn("task")?.setFilterValue(e.target.value)
             }
           />
-          <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-secondary">
+          <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-secondary cursor-pointer">
             <Search className="w-4 h-4" />
           </span>
         </div>
         <Button
           className="ml-4 px-4 py-2 bg-brand text-white rounded hover:bg-secondary cursor-pointer"
-          onClick={() => onEditTask()}
+          onClick={() => onEditTask(undefined)}
         >
           <Plus />
           Add Task
@@ -250,7 +245,13 @@ export function TaskTable({ onEditTask }: TaskTableProps) {
                   colSpan={columns.length}
                   className="h-24 text-center text-primary"
                 >
-                  <div className="min-w-[600px]">No results.</div>
+                  {loading ? (
+                    <div className="w-full animate-pulse">
+                      <Skeleton count={5} className="flex items-center " />
+                    </div>
+                  ) : (
+                    <div className="min-w-[600px]">No results.</div>
+                  )}
                 </TableCell>
               </TableRow>
             )}

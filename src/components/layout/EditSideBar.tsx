@@ -62,6 +62,7 @@ export function EditSidebar({
           setIsLoading(false);
         });
     } else {
+      setEditingMode(false);
       setIsSaving(false);
       setTaskData(null);
       setError(null);
@@ -92,10 +93,11 @@ export function EditSidebar({
 
   const handleFormSubmit = (event: React.FormEvent) => {
     event.preventDefault();
+    setFormErrors([]); // TODO: Validate fields and set errors if any
     setIsSaving(true);
     if (taskData) {
       onSave(taskData);
-    }
+    } else setIsSaving(false);
   };
 
   return (
@@ -157,6 +159,19 @@ export function EditSidebar({
         )}
         {!isLoading && !error && (
           <form onSubmit={handleFormSubmit} className="space-y-5">
+            {!editingMode && (
+              <div className="grid w-full items-center gap-1.5">
+                <Label htmlFor="task">Task</Label>
+                <Input
+                  type="text"
+                  className="border-secondary text-[11px] text-primary"
+                  id="task"
+                  name="task"
+                  value={taskData?.task}
+                  onChange={handleStandardInputChange}
+                />
+              </div>
+            )}
             <div className="grid w-full items-center gap-1.5">
               <Label htmlFor="due">Due</Label>
               <Input
@@ -164,7 +179,7 @@ export function EditSidebar({
                 className="border-secondary text-[11px] cursor-pointer text-primary"
                 id="due"
                 name="due"
-                value={formatToYYYYMMDD(taskData?.due)}
+                value={taskData?.due ? formatToYYYYMMDD(taskData.due) : ""}
                 placeholder="Pick a Date"
                 onChange={handleStandardInputChange}
                 min={minDate}
@@ -239,7 +254,7 @@ export function EditSidebar({
               >
                 Cancel
               </Button>
-              {editingMode ?? (
+              {editingMode && (
                 <Button
                   type="button"
                   variant="outline"
