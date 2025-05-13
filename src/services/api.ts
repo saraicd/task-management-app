@@ -147,3 +147,27 @@ export const updateTask = async (
     };
   }
 };
+
+export const deleteTask = async (
+  taskId: number
+): Promise<{ success: boolean; error: string | null }> => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/tasks/${taskId}`, {
+      method: "DELETE",
+    });
+
+    if (!response.ok) {
+      return {
+        success: false,
+        error: "Failed to delete task.",
+      };
+    }
+
+    return { success: true, error: null };
+  } catch (error: any) {
+    return {
+      success: false,
+      error: error.message || "Unknown error occurred while deleting task.",
+    };
+  }
+};

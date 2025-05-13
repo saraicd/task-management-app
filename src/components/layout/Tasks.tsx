@@ -2,9 +2,8 @@ import { useState } from "react";
 import TaskTable, { TaskData } from "../common/TaskTable";
 import { EditSidebar } from "./EditSideBar";
 import { Heading } from "../common/Heading";
-import { toast } from "sonner";
-import { CheckCircle, CircleAlert } from "lucide-react";
-import { addTask, updateTask } from "../../services/api";
+import { addTask, deleteTask, updateTask } from "../../services/api";
+import { showSuccessToast, showWarningToast } from "../common/Toast";
 
 export function Tasks() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -26,35 +25,15 @@ export function Tasks() {
     setEditingTaskId(null);
   };
 
-  const handleSaveChanges = async (newTask: TaskData) => {
+  const handleSave = async (newTask: TaskData) => {
     const { task, error } = await addTask(newTask);
 
     handleCloseSidebar();
     if (error) {
-      toast.warning(error, {
-        duration: 3000,
-        style: {
-          backgroundColor: "var(--color-black)",
-          color: "var(--color-error)",
-          borderColor: "var(--color-error)",
-          fontSize: "11px",
-          fontFamily: "var(--font-family)",
-        },
-        icon: <CircleAlert className="w-4 h-4" />,
-      });
+      showWarningToast(error);
     } else if (task) {
       setIsTableChanged((prev) => !prev);
-      toast.success(`${task.task} added successfully!`, {
-        duration: 3000,
-        style: {
-          backgroundColor: "var(--color-black)",
-          color: "var(--color-brand)",
-          borderColor: "var(--color-brand)",
-          fontSize: "11px",
-          fontFamily: "var(--font-family)",
-        },
-        icon: <CheckCircle className="w-4 h-4" />,
-      });
+      showSuccessToast(`${task.task} added successfully!`);
     }
   };
 
@@ -63,35 +42,27 @@ export function Tasks() {
 
     handleCloseSidebar();
     if (error) {
-      toast.warning(error, {
-        duration: 3000,
-        style: {
-          backgroundColor: "var(--color-black)",
-          color: "var(--color-error)",
-          borderColor: "var(--color-error)",
-          fontSize: "11px",
-          fontFamily: "var(--font-family)",
-        },
-        icon: <CircleAlert className="w-4 h-4" />,
-      });
+      showWarningToast(error);
     } else if (task) {
       setIsTableChanged((prev) => !prev);
-      toast.success(`Task "${task.task}" updated successfully!`, {
-        duration: 3000,
-        style: {
-          backgroundColor: "var(--color-black)",
-          color: "var(--color-brand)",
-          borderColor: "var(--color-brand)",
-          fontSize: "11px",
-          fontFamily: "var(--font-family)",
-        },
-        icon: <CheckCircle className="w-4 h-4" />,
-      });
+      showSuccessToast(`Task "${task.task}" updated successfully!`);
+    }
+  };
+
+  const handleDelete = async (taskId: number) => {
+    const { success, error } = await deleteTask(taskId);
+
+    handleCloseSidebar();
+    if (!success) {
+      showWarningToast(error ?? "");
+    } else {
+      setIsTableChanged((prev) => !prev);
+      showSuccessToast(`Task deleted successfully!`);
     }
   };
 
   return (
-    <main className="relative min-h-screen" role="main">
+    <main className="relative " role="main">
       <header className="pt-4 pb-0 text-left">
         <Heading level={3}>Task List</Heading>
       </header>
@@ -105,8 +76,9 @@ export function Tasks() {
         isOpen={isSidebarOpen}
         taskId={editingTaskId}
         onClose={handleCloseSidebar}
-        onSave={handleSaveChanges}
+        onSave={handleSave}
         onUpdate={handleUpdateTask}
+        onDelete={handleDelete}
       />
     </main>
   );
