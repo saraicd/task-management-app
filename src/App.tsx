@@ -12,7 +12,7 @@ function App() {
     linkList.find((link) => link.label === selectedLabel) || linkList[0];
 
   return (
-    <main className="flex w-full h-screen sm:px-[80px] px-2">
+    <main className="flex w-full min-h-screen sm:px-[80px] px-2  overflow-y-auto">
       <Sidebar onSelect={setSelectedLabel} />
       <Toaster />
       <section

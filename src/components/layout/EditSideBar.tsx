@@ -25,6 +25,7 @@ interface EditSidebarProps {
   taskId: number | null;
   onClose: () => void;
   onSave: (updatedTask: TaskData) => void;
+  onUpdate: (updatedTask: TaskData) => void;
 }
 
 export function EditSidebar({
@@ -32,6 +33,7 @@ export function EditSidebar({
   taskId,
   onClose,
   onSave,
+  onUpdate,
 }: EditSidebarProps) {
   const [taskData, setTaskData] = useState<TaskData | null>(null);
   const [editingMode, setEditingMode] = useState(false);
@@ -145,7 +147,10 @@ export function EditSidebar({
       return;
     }
     setIsSaving(true);
-    if (taskData) {
+    if (taskData && editingMode) {
+      onUpdate(taskData);
+    }
+    if (taskData && !editingMode) {
       onSave(taskData);
     } else setIsSaving(false);
   };
@@ -214,7 +219,7 @@ export function EditSidebar({
                 <Label htmlFor="task">Task</Label>
                 <Input
                   type="text"
-                  className="border-secondary text-[11px] text-primary"
+                  className="border-secondary text-[11px] text-primary selection:text-black"
                   id="task"
                   name="task"
                   value={taskData?.task}
@@ -240,7 +245,7 @@ export function EditSidebar({
               <Label htmlFor="owner">Owner</Label>
               <Input
                 type="text"
-                className="border-secondary text-[11px] text-primary"
+                className="border-secondary text-[11px] text-primary selection:text-black"
                 id="owner"
                 name="owner"
                 value={taskData?.owner}

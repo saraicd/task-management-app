@@ -44,9 +44,10 @@ declare module "@tanstack/react-table" {
 
 interface TaskTableProps {
   onEditTask: (taskId: number | undefined) => void;
+  isTableChanged: boolean;
 }
 
-export function TaskTable({ onEditTask }: TaskTableProps) {
+export function TaskTable({ onEditTask, isTableChanged }: TaskTableProps) {
   const [data, setTasks] = useState<TaskData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -180,7 +181,7 @@ export function TaskTable({ onEditTask }: TaskTableProps) {
       }
     };
     loadTasks();
-  }, []);
+  }, [isTableChanged]);
 
   const table = useReactTable({
     data,
