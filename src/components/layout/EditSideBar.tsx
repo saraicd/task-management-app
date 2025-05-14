@@ -18,6 +18,7 @@ import Skeleton from "react-loading-skeleton";
 import { Alert, AlertDescription } from "../ui/alert";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { T } from "vitest/dist/chunks/reporters.d.79o4mouw.js";
 
 interface EditSidebarProps {
   isOpen: boolean;
@@ -71,7 +72,7 @@ export function EditSidebar({
     } else {
       setEditingMode(false);
       setIsSaving(false);
-      setTaskData(null);
+      setTaskData({ status: false } as TaskData);
       setError(null);
     }
   }, [isOpen, taskId]);
@@ -244,14 +245,18 @@ export function EditSidebar({
                 />
               </div>
               <div className="grid w-full items-center gap-1.5">
-                <Label htmlFor="status-select">Status</Label>{" "}
+                <Label htmlFor="status-select">Status</Label>
                 <Select
-                  value={taskData?.status ? "true" : "false"}
+                  value={taskData?.status ? "On track" : "No status"}
                   onValueChange={(value) => {
-                    setTaskData((prevData) => {
-                      if (!prevData) return null;
-                      return { ...prevData, status: value === "true" };
-                    });
+                    console.log("Selected value:", value, taskData);
+                    setTaskData(
+                      (prevData) =>
+                        ({
+                          ...prevData,
+                          status: value === "On track",
+                        } as TaskData)
+                    );
                   }}
                 >
                   <SelectTrigger
@@ -259,20 +264,20 @@ export function EditSidebar({
                     className="border-secondary w-full text-[11px] cursor-pointer focus:border-brand text-primary"
                     aria-required="true"
                   >
-                    <SelectValue placeholder="Select status..." />
+                    <SelectValue />
                   </SelectTrigger>
                   <SelectContent className="bg-secondary border-0">
                     <SelectItem
-                      value="true"
+                      value="On track"
                       className="cursor-pointer hover:bg-white text-[11px] text-primary"
                     >
-                      Active
+                      On track
                     </SelectItem>
                     <SelectItem
-                      value="false"
+                      value="No status"
                       className="cursor-pointer hover:bg-white text-[11px] text-primary"
                     >
-                      Inactive
+                      No status
                     </SelectItem>
                   </SelectContent>
                 </Select>

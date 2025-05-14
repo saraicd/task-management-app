@@ -115,8 +115,8 @@ export function TaskTable({ onEditTask, isTableChanged }: TaskTableProps) {
         ),
         cell: ({ row }) => {
           const status = row.getValue("status");
-          const statusColor = status ? "bg-secondary" : "bg-brand";
-          const statusText = status ? "No status" : "On track";
+          const statusColor = status ? "bg-brand" : "bg-secondary";
+          const statusText = status ? "On track" : "No status";
           return (
             <div className="flex items-center gap-2">
               <div
@@ -187,7 +187,6 @@ export function TaskTable({ onEditTask, isTableChanged }: TaskTableProps) {
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
   });
