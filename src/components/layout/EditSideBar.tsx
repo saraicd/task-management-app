@@ -18,7 +18,6 @@ import Skeleton from "react-loading-skeleton";
 import { Alert, AlertDescription } from "../ui/alert";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { T } from "vitest/dist/chunks/reporters.d.79o4mouw.js";
 
 interface EditSidebarProps {
   isOpen: boolean;
