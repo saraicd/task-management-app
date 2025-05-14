@@ -63,7 +63,7 @@ export function TaskTable({ onEditTask, isTableChanged }: TaskTableProps) {
         ),
         cell: ({ row }) => (
           <div
-            className="text-left cursor-pointer"
+            className="text-left cursor-pointer break-words whitespace-normal"
             onClick={() => onEditTask(row.original.id)}
           >
             <Text fontWeight="400">
@@ -75,7 +75,7 @@ export function TaskTable({ onEditTask, isTableChanged }: TaskTableProps) {
       {
         accessorKey: "due",
         meta: {
-          className: "hidden sm:table-cell text-center",
+          className: "hidden md:table-cell text-center",
         },
         header: () => (
           <Text fontSize="11px" fontWeight="700">
@@ -105,7 +105,7 @@ export function TaskTable({ onEditTask, isTableChanged }: TaskTableProps) {
       {
         accessorKey: "status",
         meta: {
-          className: "hidden sm:table-cell text-center",
+          className: "hidden md:table-cell text-center",
         },
         header: () => (
           <Text fontSize="11px" fontWeight="700">
@@ -222,7 +222,7 @@ export function TaskTable({ onEditTask, isTableChanged }: TaskTableProps) {
         </Button>
       </div>
       <div className="rounded-[4px] border border-secondary">
-        <Table className="rounded-md overflow-hidden table-fixed">
+        <Table className="rounded-md overflow-hidden table-auto pb-2">
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id} className="border-secondary">

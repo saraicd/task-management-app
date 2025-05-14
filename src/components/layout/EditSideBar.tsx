@@ -215,6 +215,7 @@ export function EditSidebar({
                     value={taskData?.task}
                     onChange={handleStandardInputChange}
                     aria-required="true"
+                    maxLength={100}
                   />
                 </div>
               )}
@@ -238,6 +239,7 @@ export function EditSidebar({
                   className="border-secondary text-[11px] text-primary selection:text-black"
                   id="owner"
                   name="owner"
+                  maxLength={50}
                   value={taskData?.owner}
                   onChange={handleStandardInputChange}
                   aria-required="true"
