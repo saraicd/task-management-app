@@ -1,6 +1,6 @@
 import { TaskData } from "../components/common/TaskTable";
 
-const API_BASE_URL = "https://68126393129f6313e20e6dfb.mockapi.io/api";
+const API_BASE_URL = "https://68400f695b39a8039a56a6a5.mockapi.io/task-m-api";
 
 export type TaskApiResponseItem = {
   createdAt: string;
