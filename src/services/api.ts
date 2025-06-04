@@ -14,7 +14,7 @@ export type TaskApiResponseItem = {
 
 export const fetchTasks = async (): Promise<TaskData[]> => {
   try {
-    const response = await fetch(`${API_BASE_URL}/tasks`);
+    const response = await fetch(`${API_BASE_URL}/task`);
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
@@ -22,10 +22,10 @@ export const fetchTasks = async (): Promise<TaskData[]> => {
     return apiResponse.map((item) => ({
       id: parseInt(item.id, 10),
       task: item.task || "No Title",
-      due: new Date(item.due) || new Date(),
+      due: new Date(item.due),
       owner: item.owner || "Unknown",
       status: item.status || false,
-      progress: 0,
+      progress: item.progress ?? 0,
     }));
   } catch (error) {
     console.error("Error fetching and parsing tasks:", error);
@@ -35,7 +35,7 @@ export const fetchTasks = async (): Promise<TaskData[]> => {
 
 export const fetchTaskById = async (id: number): Promise<TaskData | null> => {
   try {
-    const response = await fetch(`${API_BASE_URL}/tasks/${id}`);
+    const response = await fetch(`${API_BASE_URL}/task/${id}`);
 
     if (!response.ok) {
       if (response.status === 404) {
@@ -55,10 +55,10 @@ export const fetchTaskById = async (id: number): Promise<TaskData | null> => {
     const taskData: TaskData = {
       id: parseInt(apiResponseItem.id, 10),
       task: apiResponseItem.task || "No Title",
-      due: new Date(apiResponseItem.due) || new Date(),
+      due: new Date(apiResponseItem.due),
       owner: apiResponseItem.owner || "Unknown",
       status: apiResponseItem.status || false,
-      progress: 0,
+      progress: apiResponseItem.progress ?? 0,
     };
 
     return taskData;
@@ -72,7 +72,7 @@ export const addTask = async (
   task: TaskData
 ): Promise<{ task: TaskData | null; error: string | null }> => {
   try {
-    const response = await fetch(`${API_BASE_URL}/tasks`, {
+    const response = await fetch(`${API_BASE_URL}/task`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -93,10 +93,10 @@ export const addTask = async (
     const newTaskData: TaskData = {
       id: parseInt(apiResponseItem.id, 10),
       task: apiResponseItem.task || "No Title",
-      due: new Date(apiResponseItem.due) || new Date(),
+      due: new Date(apiResponseItem.due),
       owner: apiResponseItem.owner || "Unknown",
       status: apiResponseItem.status || false,
-      progress: 0,
+      progress: apiResponseItem.progress ?? 0,
     };
 
     return { task: newTaskData, error: null };
@@ -112,7 +112,7 @@ export const updateTask = async (
   task: TaskData
 ): Promise<{ task: TaskData | null; error: string | null }> => {
   try {
-    const response = await fetch(`${API_BASE_URL}/tasks/${task.id}`, {
+    const response = await fetch(`${API_BASE_URL}/task/${task.id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -133,7 +133,7 @@ export const updateTask = async (
     const updatedTaskData: TaskData = {
       id: parseInt(apiResponseItem.id, 10),
       task: apiResponseItem.task || "No Title",
-      due: new Date(apiResponseItem.due) || new Date(),
+      due: new Date(apiResponseItem.due),
       owner: apiResponseItem.owner || "Unknown",
       status: apiResponseItem.status || false,
       progress: apiResponseItem.progress ?? 0,
@@ -152,7 +152,7 @@ export const deleteTask = async (
   taskId: number
 ): Promise<{ success: boolean; error: string | null }> => {
   try {
-    const response = await fetch(`${API_BASE_URL}/tasks/${taskId}`, {
+    const response = await fetch(`${API_BASE_URL}/task/${taskId}`, {
       method: "DELETE",
     });
 

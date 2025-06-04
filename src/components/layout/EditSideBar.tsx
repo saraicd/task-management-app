@@ -42,7 +42,6 @@ export function EditSidebar({
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [formErrors, setFormErrors] = useState<string[]>([]);
-  const [progress, setProgress] = useState([55]);
   const sidebarRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -88,7 +87,7 @@ export function EditSidebar({
     const { name, value } = event.target;
 
     setTaskData((prevData) => {
-      let valueToStore = value;
+      const valueToStore = value;
 
       return {
         ...prevData,
@@ -291,14 +290,21 @@ export function EditSidebar({
                 <Slider
                   id="progress"
                   name="progress"
-                  value={progress}
-                  onValueChange={(value) => setProgress(value)}
+                  value={[taskData?.progress ?? 0]}
+                  onValueChange={(value) => {
+                    setTaskData(
+                      (prevData) =>
+                        ({
+                          ...prevData,
+                          progress: value[0],
+                        } as TaskData)
+                    );
+                  }}
                   max={100}
                   step={1}
                   className="w-full cursor-pointer"
                   aria-valuemin={0}
                   aria-valuemax={100}
-                  aria-valuenow={progress[0]}
                   aria-label="Progress"
                 />
               </div>
