@@ -137,7 +137,7 @@ export function TaskTable({ onEditTask, isTableChanged }: TaskTableProps) {
         cell: ({ row }) => {
           const progress = row.getValue("progress");
           console.log("Progress data:", progress);
-          const progressValue = [progress];
+          const progressValue = typeof progress === "number" ? progress : 0;
           return (
             <Progress
               value={progressValue}
