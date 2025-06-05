@@ -32,7 +32,7 @@ export type TaskData = {
   due: Date;
   owner: string;
   status: boolean;
-  progress?: number;
+  progress: number;
 };
 
 declare module "@tanstack/react-table" {
@@ -134,8 +134,10 @@ export function TaskTable({ onEditTask, isTableChanged }: TaskTableProps) {
             Progress
           </Text>
         ),
-        cell: () => {
-          const progressValue = Math.floor(Math.random() * 101);
+        cell: ({ row }) => {
+          const progress = row.getValue("progress");
+          console.log("Progress data:", progress);
+          const progressValue = typeof progress === "number" ? progress : 0;
           return (
             <Progress
               value={progressValue}
